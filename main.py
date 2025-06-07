@@ -59,9 +59,8 @@ class Piece:
     
     def draw(self, surface):
         # Calculate position
-        pos_x = BOARD_MARGIN_X + self.x * CELL_SIZE + CELL_SIZE // 2
-        pos_y = BOARD_MARGIN_Y + self.y * CELL_SIZE + CELL_SIZE // 2
-        
+        pos_x = BOARD_MARGIN_X + self.x * CELL_SIZE
+        pos_y = BOARD_MARGIN_Y + self.y * CELL_SIZE        
         # Draw piece circle
         circle_color = RED if self.color == 'r' else BLACK
         pygame.draw.circle(surface, circle_color, (pos_x, pos_y), CELL_SIZE // 2 - 5)
@@ -209,8 +208,8 @@ class Board:
             legal_moves = self.get_legal_moves(self.selected_piece)
             for move in legal_moves:
                 x, y = move
-                pos_x = BOARD_MARGIN_X + x * CELL_SIZE + CELL_SIZE // 2
-                pos_y = BOARD_MARGIN_Y + y * CELL_SIZE + CELL_SIZE // 2
+                pos_x = BOARD_MARGIN_X + x * CELL_SIZE
+                pos_y = BOARD_MARGIN_Y + y * CELL_SIZE
                 
                 # Check if there's a piece at this position
                 target_piece = self.get_piece_at(x, y)
