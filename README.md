@@ -1,1 +1,1 @@
-# Game005
+install pygame to run it
