@@ -12,8 +12,9 @@ SCREEN_HEIGHT = 700
 BOARD_WIDTH = 9
 BOARD_HEIGHT = 10
 CELL_SIZE = 60
-BOARD_MARGIN_X = (SCREEN_WIDTH - BOARD_WIDTH * CELL_SIZE) // 2
-BOARD_MARGIN_Y = (SCREEN_HEIGHT - BOARD_HEIGHT * CELL_SIZE) // 2
+BOARD_MARGIN_X = (SCREEN_WIDTH - (BOARD_WIDTH - 1) * CELL_SIZE) // 2
+
+BOARD_MARGIN_Y = (SCREEN_HEIGHT - (BOARD_HEIGHT - 1) * CELL_SIZE) // 2
 
 # Colors
 BLACK = (0, 0, 0)
@@ -161,20 +162,32 @@ class Board:
     
     def draw(self, surface):
         # Draw board background
-        pygame.draw.rect(surface, LIGHT_BROWN, 
-                         (BOARD_MARGIN_X, BOARD_MARGIN_Y, 
-                          BOARD_WIDTH * CELL_SIZE, BOARD_HEIGHT * CELL_SIZE))
-        
-        # Draw grid lines
-        for i in range(BOARD_WIDTH + 1):
+        pygame.draw.rect(        
+        surface,
+        LIGHT_BROWN,
+
+            (
+                BOARD_MARGIN_X,
+                BOARD_MARGIN_Y,
+                (BOARD_WIDTH - 1) * CELL_SIZE,
+                (BOARD_HEIGHT - 1) * CELL_SIZE,
+            ),
+        )
+        for i in range(BOARD_WIDTH):
             pygame.draw.line(surface, BLACK, 
                             (BOARD_MARGIN_X + i * CELL_SIZE, BOARD_MARGIN_Y),
-                            (BOARD_MARGIN_X + i * CELL_SIZE, BOARD_MARGIN_Y + BOARD_HEIGHT * CELL_SIZE))
-        
-        for i in range(BOARD_HEIGHT + 1):
-            pygame.draw.line(surface, BLACK, 
+                            (
+                                BOARD_MARGIN_X + i * CELL_SIZE,
+                                BOARD_MARGIN_Y + (BOARD_HEIGHT - 1) * CELL_SIZE,
+                            ))
+
+        for i in range(BOARD_HEIGHT):
+            pygame.draw.line(surface, BLACK,
                             (BOARD_MARGIN_X, BOARD_MARGIN_Y + i * CELL_SIZE),
-                            (BOARD_MARGIN_X + BOARD_WIDTH * CELL_SIZE, BOARD_MARGIN_Y + i * CELL_SIZE))
+                            (
+                                BOARD_MARGIN_X + (BOARD_WIDTH - 1) * CELL_SIZE,
+                                 BOARD_MARGIN_Y + i * CELL_SIZE,
+                            ))
         
         # Draw palace diagonals
         # Top palace
