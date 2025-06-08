@@ -475,64 +475,67 @@ class Board:
         # Determine forward direction based on color
         forward = -1 if piece.color == 'r' else 1
         
-         # Forward move
-         new_y = piece.y + forward
-         if 0 <= new_y <= 9:
-             target_piece = self.get_piece_at(piece.x, new_y)
-             if not target_piece or target_piece.color != piece.color:
-                 moves.append((piece.x, new_y))
-         
-         # Check if soldier has crossed the river
-         crossed_river = (piece.color == 'r' and piece.y < 5) or (piece.color == 'b' and piece.y > 4)
-         
-         if crossed_river:
-             # Horizontal moves
-             for dx in [-1, 1]:
-                 new_x = piece.x + dx
-                 if 0 <= new_x <= 8:
-                     target_piece = self.get_piece_at(new_x, piece.y)
-                     if not target_piece or target_piece.color != piece.color:
-                         moves.append((new_x, piece.y))
-         
-         return moves
-     
-     def select_piece(self, x, y):
-         piece = self.get_piece_at(x, y)
+        # Forward move
+        new_y = piece.y + forward
+        if 0 <= new_y <= 9:
+            target_piece = self.get_piece_at(piece.x, new_y)
+            if not target_piece or target_piece.color != piece.color:
+                moves.append((piece.x, new_y))
 
-         # Deselect current piece if any
-         if self.selected_piece:
-              current = self.selected_piece
-              current.selected = False
-              self.selected_piece = None
- 
-             # If clicking on a different piece of the same color, select it
-             if piece and piece.color == self.current_turn:
-                 self.selected_piece = piece
-                 piece.selected = True
-             # If clicking on a legal move position, move the piece
-             elif current.color == self.current_turn:
-                  legal_moves = self.get_legal_moves(current)
-                 if (x, y) in legal_moves:
-                      self.move_piece(current, x, y)
-                     return True  # Move was made
-         # Select a new piece if it's the current player's turn
-         elif piece and piece.color == self.current_turn:
-             self.selected_piece = piece
-             piece.selected = True
+        # Check if soldier has crossed the river
+        crossed_river = (
+            (piece.color == 'r' and piece.y < 5)
+            or (piece.color == 'b' and piece.y > 4)
+        )
 
-         return False  # No move was made
-     
-     def move_piece(self, piece, x, y):
-         # Check if there's a piece at the target position
-         target_piece = self.get_piece_at(x, y)
-         if target_piece:
-             self.pieces.remove(target_piece)
-         
-         # Move the piece
-         piece.x, piece.y = x, y
-         
-         # Switch turns
-         self.current_turn = 'b' if self.current_turn == 'r' else 'r'
+        if crossed_river:
+            # Horizontal moves
+            for dx in [-1, 1]:
+                new_x = piece.x + dx
+                if 0 <= new_x <= 8:
+                    target_piece = self.get_piece_at(new_x, piece.y)
+                    if not target_piece or target_piece.color != piece.color:
+                        moves.append((new_x, piece.y))
+
+        return moves
+
+    def select_piece(self, x, y):
+        piece = self.get_piece_at(x, y)
+
+        # Deselect current piece if any
+        if self.selected_piece:
+            current = self.selected_piece
+            current.selected = False
+            self.selected_piece = None
+
+            # If clicking on a different piece of the same color, select it
+            if piece and piece.color == self.current_turn:
+                self.selected_piece = piece
+                piece.selected = True
+            # If clicking on a legal move position, move the piece
+            elif current.color == self.current_turn:
+                legal_moves = self.get_legal_moves(current)
+                if (x, y) in legal_moves:
+                    self.move_piece(current, x, y)
+                    return True  # Move was made
+        # Select a new piece if it's the current player's turn
+        elif piece and piece.color == self.current_turn:
+            self.selected_piece = piece
+            piece.selected = True
+
+        return False  # No move was made
+
+    def move_piece(self, piece, x, y):
+        # Check if there's a piece at the target position
+        target_piece = self.get_piece_at(x, y)
+        if target_piece:
+            self.pieces.remove(target_piece)
+
+        # Move the piece
+        piece.x, piece.y = x, y
+
+        # Switch turns
+        self.current_turn = 'b' if self.current_turn == 'r' else 'r'
     
     def is_game_over(self):
         # Check if any player's general is captured
