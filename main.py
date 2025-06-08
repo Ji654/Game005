@@ -353,6 +353,23 @@ class Board:
                 target_piece = self.get_piece_at(new_x, new_y)
                 if not target_piece or target_piece.color != piece.color:
                     moves.append((new_x, new_y))
+        # Flying general capture
+        opponent_color = 'b' if piece.color == 'r' else 'r'
+        opponent_general = None
+        for p in self.pieces:
+            if p.piece_type == 'general' and p.color == opponent_color:
+                opponent_general = p
+                break
+
+        if opponent_general and piece.x == opponent_general.x:
+            min_y_between = min(piece.y, opponent_general.y) + 1
+            max_y_between = max(piece.y, opponent_general.y)
+            has_piece_between = any(
+                self.get_piece_at(piece.x, y)
+                for y in range(min_y_between, max_y_between)
+            )
+            if not has_piece_between:
+                moves.append((opponent_general.x, opponent_general.y))
         
         return moves
     
